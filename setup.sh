@@ -8,6 +8,20 @@ DOTFILES_DIR="$HOME/.dotfiles"
 echo "Setting up dotfiles..."
 
 # ===========================================
+# Homebrew
+# ===========================================
+
+read -p "Install Homebrew packages and apps? (y/n) " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+  if ! command -v brew &> /dev/null; then
+    echo "Installing Homebrew..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  fi
+  brew bundle --file="$DOTFILES_DIR/Brewfile"
+fi
+
+# ===========================================
 # Shell
 # ===========================================
 
