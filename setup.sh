@@ -68,4 +68,19 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
   "$DOTFILES_DIR/macos/defaults.sh"
 fi
 
+# ===========================================
+# Sync checker (launchd)
+# ===========================================
+
+PLIST_SRC="$DOTFILES_DIR/scripts/com.dotfiles.sync-check.plist"
+PLIST_DST="$HOME/Library/LaunchAgents/com.dotfiles.sync-check.plist"
+
+# Unload if already loaded
+launchctl unload "$PLIST_DST" 2>/dev/null
+
+# Copy and load
+cp "$PLIST_SRC" "$PLIST_DST"
+launchctl load "$PLIST_DST"
+
 echo "Dotfiles linked!"
+echo "Sync checker installed - you'll get notifications when dotfiles are updated."
