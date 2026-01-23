@@ -12,4 +12,7 @@ ln -sf "$DOTFILES_DIR/ghostty/config" ~/.config/ghostty/config
 # Spaceship
 ln -sf "$DOTFILES_DIR/spaceship/spaceshiprc.zsh" ~/.spaceshiprc.zsh
 
+# Zsh
+ln -sf "$DOTFILES_DIR/zshrc" ~/.zshrc
+
 echo "Dotfiles linked!"
