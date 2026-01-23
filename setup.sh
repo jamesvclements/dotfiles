@@ -5,14 +5,53 @@
 
 DOTFILES_DIR="$HOME/.dotfiles"
 
+echo "Setting up dotfiles..."
+
+# ===========================================
+# Shell
+# ===========================================
+
+# Zsh
+ln -sf "$DOTFILES_DIR/zshrc" ~/.zshrc
+
+# Spaceship prompt
+ln -sf "$DOTFILES_DIR/spaceship/spaceshiprc.zsh" ~/.spaceshiprc.zsh
+
+# ===========================================
+# Git
+# ===========================================
+
+# Global gitignore
+ln -sf "$DOTFILES_DIR/gitignore_global" ~/.gitignore_global
+git config --global core.excludesfile ~/.gitignore_global
+
+# ===========================================
+# Terminal
+# ===========================================
+
 # Ghostty
 mkdir -p ~/.config/ghostty
 ln -sf "$DOTFILES_DIR/ghostty/config" ~/.config/ghostty/config
 
-# Spaceship
-ln -sf "$DOTFILES_DIR/spaceship/spaceshiprc.zsh" ~/.spaceshiprc.zsh
+# ===========================================
+# Editor (Cursor)
+# ===========================================
 
-# Zsh
-ln -sf "$DOTFILES_DIR/zshrc" ~/.zshrc
+CURSOR_USER_DIR="$HOME/Library/Application Support/Cursor/User"
+mkdir -p "$CURSOR_USER_DIR"
+
+ln -sf "$DOTFILES_DIR/cursor/settings.json" "$CURSOR_USER_DIR/settings.json"
+ln -sf "$DOTFILES_DIR/cursor/keybindings.json" "$CURSOR_USER_DIR/keybindings.json"
+
+# ===========================================
+# macOS defaults
+# ===========================================
+
+read -p "Apply macOS defaults? (y/n) " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+  chmod +x "$DOTFILES_DIR/macos/defaults.sh"
+  "$DOTFILES_DIR/macos/defaults.sh"
+fi
 
 echo "Dotfiles linked!"

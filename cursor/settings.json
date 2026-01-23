@@ -1,0 +1,103 @@
+{
+  "terminal.integrated.env.osx": {},
+  "security.workspace.trust.untrustedFiles": "open",
+  "editor.tokenColorCustomizations": {
+    "[*Light*]": {
+      "textMateRules": [
+        {
+          "scope": "ref.matchtext",
+          "settings": {
+            "foreground": "#000"
+          }
+        }
+      ]
+    },
+    "[*Dark*]": {
+      "textMateRules": [
+        {
+          "scope": "ref.matchtext",
+          "settings": {
+            "foreground": "#fff"
+          }
+        }
+      ]
+    },
+    "textMateRules": []
+  },
+  "git.autofetch": true,
+  "git.enableSmartCommit": true,
+  "[typescript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "git.confirmSync": false,
+  "[avroavsc]": {
+    "editor.defaultFormatter": "tomaszbartoszewski.avro-tools"
+  },
+  "workbench.editor.editorActionsLocation": "titleBar",
+  "editor.codeActionsOnSave": {
+    "quickfix.biome": "never",
+    "source.fixAll.eslint": "never"
+  },
+  "eslint.validate": ["javascript"],
+  "editor.wordWrap": "wordWrapColumn",
+  "editor.minimap.enabled": false,
+  "diffEditor.ignoreTrimWhitespace": false,
+  "workbench.editor.customLabels.patterns": {
+    "**/app/**/page.tsx": "${dirname(1)}/${dirname}/${filename}.${extname}",
+    "**/app/**/layout.tsx": "${dirname(1)}/${dirname}/${filename}.${extname}"
+  },
+  "explorer.confirmDragAndDrop": false,
+  "explorer.confirmDelete": false,
+  "search.exclude": {
+    "**/node_modules": false
+  },
+  "dotenv.enableAutocloaking": false,
+  "iridium.npm.packageManager": "pnpm",
+  "iridium.npm.showSupportIcon": false,
+  "github.copilot.editor.enableAutoCompletions": true,
+  "versionlens.suggestions.showOnStartup": false,
+  "versionlens.suggestions.showPrereleasesOnStartup": false,
+  "editor.unicodeHighlight.invisibleCharacters": false,
+  "workbench.startupEditor": "terminal",
+  "gitlens.gitCommands.search.matchRegex": false,
+  "workbench.activityBar.orientation": "vertical",
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "git.ignoreRebaseWarning": true,
+  "cursor.aipreview.enabled": true,
+  "cursor.chat.terminalShowHoverHint": false,
+  "cursor.preferNotificationsSameAsChat": true,
+  "githubPullRequests.pushBranch": "always",
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "cursor.composer.renderPillsInsteadOfBlocks": true,
+  "githubPullRequests.pullBranch": "never",
+  "cursor.cpp.disabledLanguages": ["plaintext"],
+  "eslint.codeActionsOnSave.mode": "problems",
+  "workbench.view.alwaysShowHeaderActions": true,
+  "typescript.tsserver.maxTsServerMemory": 32768,
+  "files.associations": {
+    "CODEOWNERS": "ignore",
+    "tsconfig.*.json": "jsonc",
+    ".env*": "dotenv"
+  },
+  "biome.lsp.trace.server": "messages",
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "biome.suggestInstallingGlobally": false,
+  "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "modifications",
+  "cursor.composer.shouldChimeAfterChatFinishes": true,
+  "git.detectSubmodules": true,
+  "git.detectSubmodulesLimit": 2
+}
