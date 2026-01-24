@@ -69,9 +69,10 @@ ln -sf "$DOTFILES_DIR/cursor/settings.json" "$CURSOR_USER_DIR/settings.json"
 ln -sf "$DOTFILES_DIR/cursor/keybindings.json" "$CURSOR_USER_DIR/keybindings.json"
 
 # ===========================================
-# Claude Code
+# AI Tools (Claude Code + Cursor)
 # ===========================================
 
+# --- Claude Code ---
 mkdir -p "$HOME/.claude"
 CLAUDE_HAD_CUSTOM_SETTINGS=false
 
@@ -82,22 +83,31 @@ if [ -f "$HOME/.claude/settings.json" ] && [ ! -L "$HOME/.claude/settings.json" 
   CLAUDE_HAD_CUSTOM_SETTINGS=true
 fi
 
-# Backup existing mcp.json if present and not already a symlink
+ln -sf "$DOTFILES_DIR/claude/settings.json" "$HOME/.claude/settings.json"
+
+# --- Cursor ---
+mkdir -p "$HOME/.cursor"
+
+# --- Shared: MCP servers ---
+# Backup existing mcp.json files if not already symlinks
 if [ -f "$HOME/.mcp.json" ] && [ ! -L "$HOME/.mcp.json" ]; then
   mv "$HOME/.mcp.json" "$HOME/.mcp.backup.json"
   echo "Backed up existing ~/.mcp.json to ~/.mcp.backup.json"
 fi
+if [ -f "$HOME/.cursor/mcp.json" ] && [ ! -L "$HOME/.cursor/mcp.json" ]; then
+  mv "$HOME/.cursor/mcp.json" "$HOME/.cursor/mcp.backup.json"
+  echo "Backed up existing ~/.cursor/mcp.json to ~/.cursor/mcp.backup.json"
+fi
 
-ln -sf "$DOTFILES_DIR/claude/settings.json" "$HOME/.claude/settings.json"
-ln -sf "$DOTFILES_DIR/claude/mcp.json" "$HOME/.mcp.json"
+ln -sf "$DOTFILES_DIR/mcp.json" "$HOME/.mcp.json"
+ln -sf "$DOTFILES_DIR/mcp.json" "$HOME/.cursor/mcp.json"
 
-# Skills are tool-agnostic, stored at dotfiles root
-# Symlink to each AI tool's expected location
-mkdir -p "$HOME/.claude/skills"
-for skill_dir in "$DOTFILES_DIR/skills"/*/; do
-  skill_name=$(basename "$skill_dir")
-  ln -sfn "$skill_dir" "$HOME/.claude/skills/$skill_name"
-done
+# --- Shared: Skills ---
+# Symlink entire skills directory (individual symlinks don't work in Cursor)
+rm -rf "$HOME/.claude/skills" 2>/dev/null
+rm -rf "$HOME/.cursor/skills" 2>/dev/null
+ln -s "$DOTFILES_DIR/skills" "$HOME/.claude/skills"
+ln -s "$DOTFILES_DIR/skills" "$HOME/.cursor/skills"
 
 # Install agent-browser for browser automation skill
 if ! command -v agent-browser &> /dev/null; then
