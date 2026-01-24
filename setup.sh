@@ -11,14 +11,25 @@ echo "Setting up dotfiles..."
 # Homebrew
 # ===========================================
 
-read -p "Install Homebrew packages and apps? (y/n) " -n 1 -r
-echo
-if [[ $REPLY =~ ^[Yy]$ ]]; then
-  if ! command -v brew &> /dev/null; then
-    echo "Installing Homebrew..."
+if ! command -v brew &> /dev/null; then
+  read -p "Homebrew not found. Install it? (y/n) " -n 1 -r
+  echo
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   fi
-  brew bundle --file="$DOTFILES_DIR/Brewfile"
+fi
+
+# Check if all packages are already installed (fast check)
+if command -v brew &> /dev/null; then
+  if HOMEBREW_NO_AUTO_UPDATE=1 brew bundle check --file="$DOTFILES_DIR/Brewfile" &>/dev/null; then
+    echo "All Homebrew packages already installed."
+  else
+    read -p "Some Homebrew packages missing. Install them? (y/n) " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+      HOMEBREW_NO_AUTO_UPDATE=1 brew bundle --file="$DOTFILES_DIR/Brewfile" --no-upgrade
+    fi
+  fi
 fi
 
 # ===========================================
@@ -69,6 +80,24 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 fi
 
 # ===========================================
+# Superwhisper
+# ===========================================
+
+# Set toggle recording to Control+Space (instead of default Option+Space)
+defaults write com.superduper.superwhisper "KeyboardShortcuts_toggleRecording" -string '{"carbonModifiers":4096,"mouseButtonNumbers":[],"carbonKeyCode":49}'
+
+# ===========================================
+# Dock
+# ===========================================
+
+read -p "Configure Dock? (y/n) " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+  chmod +x "$DOTFILES_DIR/macos/dock.sh"
+  "$DOTFILES_DIR/macos/dock.sh"
+fi
+
+# ===========================================
 # Sync checker (launchd)
 # ===========================================
 
@@ -82,5 +111,29 @@ launchctl unload "$PLIST_DST" 2>/dev/null
 cp "$PLIST_SRC" "$PLIST_DST"
 launchctl load "$PLIST_DST"
 
-echo "Dotfiles linked!"
-echo "Sync checker installed - you'll get notifications when dotfiles are updated."
+echo ""
+echo "============================================="
+echo " Setup complete!"
+echo "============================================="
+echo ""
+echo "Dotfiles linked. Sync checker installed."
+echo ""
+echo "---------------------------------------------"
+echo " Manual steps required:"
+echo "---------------------------------------------"
+echo ""
+echo "APPS TO DOWNLOAD MANUALLY:"
+echo "  - Cursor: https://cursor.com/download"
+echo "  - Tailscale: https://tailscale.com/download"
+echo ""
+echo "LOGIN ITEMS TO ADD:"
+echo "  Open System Settings → General → Login Items → add these:"
+echo "  - Dropbox"
+echo "  - Raycast"
+echo "  - CleanShot X"
+echo "  - PixelSnap 2"
+echo "  - Superwhisper"
+echo ""
+echo "  Tip: Open System Settings directly:"
+echo "  open x-apple.systempreferences:com.apple.LoginItems-Settings.extension"
+echo ""
