@@ -13,6 +13,9 @@ This is a dotfiles repo for syncing macOS setup across multiple Macs.
 ├── cursor/
 │   ├── settings.json        # Cursor editor settings
 │   └── keybindings.json     # Cursor keybindings
+├── claude/settings.json     # Claude Code settings
+├── mcp.json                 # Shared MCP servers (Claude + Cursor)
+├── skills/                  # AI skills (gitignored, installed via setup)
 ├── macos/defaults.sh        # macOS system preferences (requires manual run)
 ├── scripts/
 │   ├── sync-check.sh        # Hourly sync checker (runs via launchd)
@@ -38,6 +41,17 @@ This is a dotfiles repo for syncing macOS setup across multiple Macs.
 1. Add the config file to this repo
 2. Add symlink command to both `setup.sh` and `scripts/sync-check.sh`
 3. If it requires manual action, add a dialog check in `sync-check.sh`
+
+## AI Skills
+
+The `skills/` directory is gitignored (only `.gitkeep` is tracked). During setup, you're prompted to install skills via `npx skills add`. Answering "Y" installs:
+
+- **agent-browser** - Browser automation (requires `agent-browser` CLI)
+- **vercel-react-best-practices** - React/Next.js optimization (57 rules)
+- **web-design-guidelines** - UI review against Web Interface Guidelines
+- **skill-creator** - Guide for creating new skills
+
+`npx skills add` installs to `~/.agents/skills/` and creates symlinks in `skills/`. Claude Code and Cursor both symlink to `skills/`, so both see the installed skills.
 
 ## Testing
 
