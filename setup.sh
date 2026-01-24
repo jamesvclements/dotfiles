@@ -69,6 +69,29 @@ ln -sf "$DOTFILES_DIR/cursor/settings.json" "$CURSOR_USER_DIR/settings.json"
 ln -sf "$DOTFILES_DIR/cursor/keybindings.json" "$CURSOR_USER_DIR/keybindings.json"
 
 # ===========================================
+# Claude Code
+# ===========================================
+
+mkdir -p "$HOME/.claude"
+CLAUDE_HAD_CUSTOM_SETTINGS=false
+
+# Backup existing settings if present and not already a symlink
+if [ -f "$HOME/.claude/settings.json" ] && [ ! -L "$HOME/.claude/settings.json" ]; then
+  mv "$HOME/.claude/settings.json" "$HOME/.claude/settings.backup.json"
+  echo "Backed up existing ~/.claude/settings.json to settings.backup.json"
+  CLAUDE_HAD_CUSTOM_SETTINGS=true
+fi
+
+# Backup existing mcp.json if present and not already a symlink
+if [ -f "$HOME/.mcp.json" ] && [ ! -L "$HOME/.mcp.json" ]; then
+  mv "$HOME/.mcp.json" "$HOME/.mcp.backup.json"
+  echo "Backed up existing ~/.mcp.json to ~/.mcp.backup.json"
+fi
+
+ln -sf "$DOTFILES_DIR/claude/settings.json" "$HOME/.claude/settings.json"
+ln -sf "$DOTFILES_DIR/claude/mcp.json" "$HOME/.mcp.json"
+
+# ===========================================
 # macOS defaults
 # ===========================================
 
@@ -126,6 +149,13 @@ echo "APPS TO DOWNLOAD MANUALLY:"
 echo "  - Cursor: https://cursor.com/download"
 echo "  - Tailscale: https://tailscale.com/download"
 echo ""
+if [ "$CLAUDE_HAD_CUSTOM_SETTINGS" = true ]; then
+  echo "CLAUDE CODE:"
+  echo "  Your existing permissions were backed up to:"
+  echo "  ~/.claude/settings.backup.json"
+  echo "  Move any custom permissions to ~/.claude/settings.local.json"
+  echo ""
+fi
 echo "LOGIN ITEMS TO ADD:"
 echo "  Open System Settings → General → Login Items → add these:"
 echo "  - Dropbox"
