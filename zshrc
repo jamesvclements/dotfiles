@@ -27,3 +27,6 @@ esac
 export PATH="$HOME/bin:$PATH"
 
 source "/opt/homebrew/opt/spaceship/spaceship.zsh"
+
+# Machine-specific config (secrets, local overrides)
+[ -f ~/.zshrc.local ] && source ~/.zshrc.local
