@@ -99,5 +99,6 @@
   "editor.formatOnSaveMode": "modifications",
   "cursor.composer.shouldChimeAfterChatFinishes": true,
   "git.detectSubmodules": true,
-  "git.detectSubmodulesLimit": 2
+  "git.detectSubmodulesLimit": 2,
+  "window.commandCenter": true
 }

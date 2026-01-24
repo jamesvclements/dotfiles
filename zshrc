@@ -1,4 +1,11 @@
-eval "$(/opt/homebrew/bin/brew shellenv)"
+# Homebrew (only if installed)
+   if [[ -f /opt/homebrew/bin/brew ]]; then
+     eval "$(/opt/homebrew/bin/brew shellenv)"
+   elif [[ -f /usr/local/bin/brew ]]; then
+     eval "$(/usr/local/bin/brew shellenv)"
+   fi
+   
+
 
 # fnm
 export PATH="$HOME/Library/Application Support/fnm:$PATH"
@@ -26,7 +33,14 @@ case ":$PATH:" in
 esac
 export PATH="$HOME/bin:$PATH"
 
-source "/opt/homebrew/opt/spaceship/spaceship.zsh"
+# Spaceship prompt (only if installed)
+[[ -f ~/.spaceshiprc.zsh ]] && source ~/.spaceshiprc.zsh
+if [[ -f /opt/homebrew/opt/spaceship/spaceship.zsh ]]; then
+  source /opt/homebrew/opt/spaceship/spaceship.zsh
+elif [[ -f /usr/local/opt/spaceship/spaceship.zsh ]]; then
+  source /usr/local/opt/spaceship/spaceship.zsh
+fi
 
 # Machine-specific config (secrets, local overrides)
 [ -f ~/.zshrc.local ] && source ~/.zshrc.local
+export PATH="$HOME/.local/bin:$PATH"
