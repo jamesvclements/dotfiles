@@ -1,2 +1,6 @@
 .DS_Store
 *.local.json
+
+# Skills are installed via npx during setup, not tracked in git
+skills/*
+!skills/.gitkeep

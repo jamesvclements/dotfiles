@@ -109,27 +109,37 @@ rm -rf "$HOME/.cursor/skills" 2>/dev/null
 ln -s "$DOTFILES_DIR/skills" "$HOME/.claude/skills"
 ln -s "$DOTFILES_DIR/skills" "$HOME/.cursor/skills"
 
-# Install agent-browser for browser automation skill
-if ! command -v agent-browser &> /dev/null; then
-  echo "Installing agent-browser..."
-  npm install -g agent-browser
-fi
+# Install AI skills via npx
+read -p "Install AI skills (browser, react-best-practices, web-design-guidelines, skill-creator)? (y/n) " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+  echo "Installing skills..."
+  npx -y skills add https://github.com/vercel-labs/agent-browser --skill agent-browser --agent claude-code --global --yes
+  npx -y skills add https://github.com/vercel-labs/agent-skills --skill vercel-react-best-practices --skill web-design-guidelines --agent claude-code --global --yes
+  npx -y skills add https://github.com/anthropics/skills --skill skill-creator --agent claude-code --global --yes
 
-# Fix darwin-arm64 binary permissions (npm package bug)
-AGENT_BROWSER_BIN="$(npm root -g)/agent-browser/bin/agent-browser-darwin-arm64"
-if [ -f "$AGENT_BROWSER_BIN" ] && [ ! -x "$AGENT_BROWSER_BIN" ]; then
-  chmod +x "$AGENT_BROWSER_BIN"
-fi
+  # Install agent-browser CLI and Chromium for browser skill
+  if ! command -v agent-browser &> /dev/null; then
+    echo "Installing agent-browser CLI..."
+    npm install -g agent-browser
+  fi
 
-# Install Chromium if not present
-if ! agent-browser --version &>/dev/null; then
-  echo "agent-browser binary issue, trying to fix..."
-  chmod +x "$AGENT_BROWSER_BIN" 2>/dev/null
-fi
+  # Fix darwin-arm64 binary permissions (npm package bug)
+  AGENT_BROWSER_BIN="$(npm root -g)/agent-browser/bin/agent-browser-darwin-arm64"
+  if [ -f "$AGENT_BROWSER_BIN" ] && [ ! -x "$AGENT_BROWSER_BIN" ]; then
+    chmod +x "$AGENT_BROWSER_BIN"
+  fi
 
-if [ ! -d "$HOME/Library/Caches/ms-playwright/chromium-"* ] 2>/dev/null; then
-  echo "Installing Chromium for agent-browser..."
-  agent-browser install
+  # Install Chromium if not present
+  if ! agent-browser --version &>/dev/null; then
+    echo "agent-browser binary issue, trying to fix..."
+    chmod +x "$AGENT_BROWSER_BIN" 2>/dev/null
+  fi
+
+  if [ ! -d "$HOME/Library/Caches/ms-playwright/chromium-"* ] 2>/dev/null; then
+    echo "Installing Chromium for agent-browser..."
+    agent-browser install
+  fi
 fi
 
 # ===========================================
