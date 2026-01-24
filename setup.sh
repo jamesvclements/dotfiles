@@ -91,6 +91,37 @@ fi
 ln -sf "$DOTFILES_DIR/claude/settings.json" "$HOME/.claude/settings.json"
 ln -sf "$DOTFILES_DIR/claude/mcp.json" "$HOME/.mcp.json"
 
+# Skills are tool-agnostic, stored at dotfiles root
+# Symlink to each AI tool's expected location
+mkdir -p "$HOME/.claude/skills"
+for skill_dir in "$DOTFILES_DIR/skills"/*/; do
+  skill_name=$(basename "$skill_dir")
+  ln -sfn "$skill_dir" "$HOME/.claude/skills/$skill_name"
+done
+
+# Install agent-browser for browser automation skill
+if ! command -v agent-browser &> /dev/null; then
+  echo "Installing agent-browser..."
+  npm install -g agent-browser
+fi
+
+# Fix darwin-arm64 binary permissions (npm package bug)
+AGENT_BROWSER_BIN="$(npm root -g)/agent-browser/bin/agent-browser-darwin-arm64"
+if [ -f "$AGENT_BROWSER_BIN" ] && [ ! -x "$AGENT_BROWSER_BIN" ]; then
+  chmod +x "$AGENT_BROWSER_BIN"
+fi
+
+# Install Chromium if not present
+if ! agent-browser --version &>/dev/null; then
+  echo "agent-browser binary issue, trying to fix..."
+  chmod +x "$AGENT_BROWSER_BIN" 2>/dev/null
+fi
+
+if [ ! -d "$HOME/Library/Caches/ms-playwright/chromium-"* ] 2>/dev/null; then
+  echo "Installing Chromium for agent-browser..."
+  agent-browser install
+fi
+
 # ===========================================
 # macOS defaults
 # ===========================================

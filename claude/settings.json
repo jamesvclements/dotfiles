@@ -43,7 +43,10 @@
 
       "Bash(gh:*)",
       "Bash(claude:*)",
-      "WebSearch"
+      "Bash(agent-browser:*)",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)"
     ],
     "ask": [
       "Bash(git push:*)",
