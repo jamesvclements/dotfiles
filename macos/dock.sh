@@ -15,10 +15,15 @@ dockutil --remove all --no-restart
 
 # Add apps in order
 dockutil --add /Applications/Google\ Chrome.app --no-restart
-dockutil --add /Applications/Obsidian.app --no-restart
-dockutil --add /Applications/Figma.app --no-restart
+dockutil --add /Applications/Cursor.app --no-restart
 dockutil --add /Applications/Ghostty.app --no-restart
+dockutil --add /Applications/Obsidian.app --no-restart
 dockutil --add /Applications/Spotify.app --no-restart
+dockutil --add /System/Applications/Messages.app --no-restart
+
+# Add folders (right side)
+dockutil --add /Applications --section others --display stack --no-restart
+dockutil --add ~/Downloads --section others --display stack --no-restart
 
 # Dock appearance settings
 defaults write com.apple.dock tilesize -int 49
