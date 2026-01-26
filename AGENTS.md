@@ -57,4 +57,4 @@ The `skills/` directory is gitignored (only `.gitkeep` is tracked). During setup
 
 Run sync manually: `~/.dotfiles/scripts/sync-check.sh`
 Check launchd status: `launchctl list | grep dotfiles`
-View sync logs: `cat /tmp/dotfiles-sync.log`
+View sync log: `cat ~/.dotfiles/.sync-log` (gitignored, local audit trail)
