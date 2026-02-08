@@ -10,10 +10,12 @@ brew "dockutil"
 brew "duti"
 brew "ripgrep"
 brew "ffmpeg"
+brew "imagemagick"
 brew "yt-dlp"
 
 # GUI Apps
 cask "1password"
+cask "1password-cli"
 cask "ghostty"
 cask "obsidian"
 cask "spotify"
