@@ -57,6 +57,8 @@ git config --global core.excludesfile ~/.gitignore_global
 # Ghostty
 mkdir -p ~/.config/ghostty
 ln -sf "$DOTFILES_DIR/ghostty/config" ~/.config/ghostty/config
+mkdir -p "$HOME/Library/Application Support/com.mitchellh.ghostty"
+ln -sf "$DOTFILES_DIR/ghostty/config" "$HOME/Library/Application Support/com.mitchellh.ghostty/config"
 
 # ===========================================
 # Editor (Cursor)
@@ -67,6 +69,37 @@ mkdir -p "$CURSOR_USER_DIR"
 
 ln -sf "$DOTFILES_DIR/cursor/settings.json" "$CURSOR_USER_DIR/settings.json"
 ln -sf "$DOTFILES_DIR/cursor/keybindings.json" "$CURSOR_USER_DIR/keybindings.json"
+
+# ===========================================
+# Node (fnm)
+# ===========================================
+
+# Default global packages for new Node versions
+FNM_DIR="${FNM_DIR:-$HOME/Library/Application Support/fnm}"
+mkdir -p "$FNM_DIR"
+ln -sf "$DOTFILES_DIR/fnm/default-packages" "$FNM_DIR/default-packages"
+
+# Install global packages on current Node if missing
+if command -v npm &> /dev/null; then
+  INSTALLED=$(npm ls -g --depth=0 --parseable 2>/dev/null | xargs -I{} basename {})
+  MISSING=()
+  while IFS= read -r pkg; do
+    [ -z "$pkg" ] && continue
+    PKG_NAME=$(echo "$pkg" | sed 's/@[^/]*$//')  # strip version if any
+    if ! echo "$INSTALLED" | grep -q "$(basename "$PKG_NAME")"; then
+      MISSING+=("$pkg")
+    fi
+  done < "$DOTFILES_DIR/fnm/default-packages"
+
+  if [ ${#MISSING[@]} -gt 0 ]; then
+    echo "Missing global npm packages: ${MISSING[*]}"
+    read -p "Install them? (y/n) " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+      npm install -g "${MISSING[@]}"
+    fi
+  fi
+fi
 
 # ===========================================
 # AI Tools (Claude Code + Cursor)

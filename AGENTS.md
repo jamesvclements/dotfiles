@@ -14,6 +14,7 @@ This is a dotfiles repo for syncing macOS setup across multiple Macs.
 │   ├── settings.json        # Cursor editor settings
 │   └── keybindings.json     # Cursor keybindings
 ├── claude/settings.json     # Claude Code settings
+├── fnm/default-packages     # Global npm packages auto-installed with new Node versions
 ├── mcp.json                 # Shared MCP servers (Claude + Cursor)
 ├── skills/                  # AI skills (gitignored, installed via setup)
 ├── macos/defaults.sh        # macOS system preferences (requires manual run)
@@ -32,7 +33,7 @@ This is a dotfiles repo for syncing macOS setup across multiple Macs.
 
 ## Key behaviors
 
-- **Safe auto-apply**: symlinks for zshrc, ghostty, cursor, spaceship, gitignore
+- **Safe auto-apply**: symlinks for zshrc, ghostty, cursor, spaceship, gitignore, fnm default-packages
 - **Manual action needed**: Brewfile changes (new apps), macos/defaults.sh changes
 - **Notifications**: Uses osascript dialogs (not notifications) with Copy/Dismiss buttons
 

@@ -50,12 +50,19 @@ if [ "$LOCAL" != "$REMOTE" ]; then
   # Ghostty
   mkdir -p ~/.config/ghostty
   ln -sf "$DOTFILES_DIR/ghostty/config" ~/.config/ghostty/config
+  mkdir -p "$HOME/Library/Application Support/com.mitchellh.ghostty"
+  ln -sf "$DOTFILES_DIR/ghostty/config" "$HOME/Library/Application Support/com.mitchellh.ghostty/config"
 
   # Cursor
   CURSOR_USER_DIR="$HOME/Library/Application Support/Cursor/User"
   mkdir -p "$CURSOR_USER_DIR"
   ln -sf "$DOTFILES_DIR/cursor/settings.json" "$CURSOR_USER_DIR/settings.json"
   ln -sf "$DOTFILES_DIR/cursor/keybindings.json" "$CURSOR_USER_DIR/keybindings.json"
+
+  # fnm default-packages
+  FNM_DIR="${FNM_DIR:-$HOME/Library/Application Support/fnm}"
+  mkdir -p "$FNM_DIR"
+  ln -sf "$DOTFILES_DIR/fnm/default-packages" "$FNM_DIR/default-packages"
 
   log "applied | symlinks refreshed"
 
