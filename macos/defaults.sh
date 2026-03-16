@@ -6,6 +6,91 @@
 echo "Setting macOS defaults..."
 
 # ===========================================
+# Trackpad
+# ===========================================
+
+# Tap to click
+defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+
+# Natural scrolling
+defaults write NSGlobalDomain com.apple.swipescrolldirection -bool true
+
+# Tracking speed (0.0 to 3.0)
+defaults write NSGlobalDomain com.apple.trackpad.scaling -float 2
+
+# Light click threshold (0 = light, 1 = medium, 2 = firm)
+defaults write com.apple.AppleMultitouchTrackpad FirstClickThreshold -int 0
+defaults write com.apple.AppleMultitouchTrackpad SecondClickThreshold -int 0
+
+# Force click (haptic feedback)
+defaults write com.apple.AppleMultitouchTrackpad ActuateDetents -int 1
+defaults write com.apple.AppleMultitouchTrackpad ForceSuppressed -bool false
+
+# Silent clicking (0 = normal, 1 = silent)
+defaults write com.apple.AppleMultitouchTrackpad ActuationStrength -int 0
+
+# Two-finger right click
+defaults write com.apple.AppleMultitouchTrackpad TrackpadRightClick -bool true
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadRightClick -bool true
+
+# Pinch to zoom
+defaults write com.apple.AppleMultitouchTrackpad TrackpadPinch -bool true
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadPinch -bool true
+
+# Smart zoom (two-finger double tap)
+defaults write com.apple.AppleMultitouchTrackpad TrackpadTwoFingerDoubleTapGesture -int 1
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadTwoFingerDoubleTapGesture -int 1
+
+# Rotate
+defaults write com.apple.AppleMultitouchTrackpad TrackpadRotate -bool true
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadRotate -bool true
+
+# Swipe between pages (two fingers)
+defaults write NSGlobalDomain AppleEnableSwipeNavigateWithScrolls -bool true
+
+# Notification Center swipe (two-finger from right edge)
+defaults write com.apple.AppleMultitouchTrackpad TrackpadTwoFingerFromRightEdgeSwipeGesture -int 3
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadTwoFingerFromRightEdgeSwipeGesture -int 3
+
+# Three-finger tap for Look Up
+defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerTapGesture -int 2
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerTapGesture -int 2
+
+# Mission Control (three-finger swipe up)
+defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerVertSwipeGesture -int 2
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerVertSwipeGesture -int 2
+
+# App Exposé (three-finger swipe down — same gesture group as Mission Control)
+# Value 2 = enabled for both vert swipe gestures above
+
+# Swipe between full-screen apps (three-finger horizontal)
+defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerHorizSwipeGesture -int 2
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerHorizSwipeGesture -int 2
+
+# Launchpad & Show Desktop (four-finger pinch)
+defaults write com.apple.AppleMultitouchTrackpad TrackpadFourFingerPinchGesture -int 2
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadFourFingerPinchGesture -int 2
+defaults write com.apple.AppleMultitouchTrackpad TrackpadFiveFingerPinchGesture -int 2
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadFiveFingerPinchGesture -int 2
+
+# Four-finger horizontal swipe (spaces)
+defaults write com.apple.AppleMultitouchTrackpad TrackpadFourFingerHorizSwipeGesture -int 2
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadFourFingerHorizSwipeGesture -int 2
+
+# Four-finger vertical swipe
+defaults write com.apple.AppleMultitouchTrackpad TrackpadFourFingerVertSwipeGesture -int 2
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadFourFingerVertSwipeGesture -int 2
+
+# ===========================================
+# Universal Control
+# ===========================================
+
+# Enable Universal Control (requires same iCloud account across devices)
+defaults write com.apple.universalcontrol Disable -bool false
+defaults write com.apple.universalcontrol DisableMagicEdges -bool false
+
+# ===========================================
 # Mouse
 # ===========================================
 
