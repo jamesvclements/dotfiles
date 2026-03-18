@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Check for dotfiles updates, auto-apply safe changes, notify for manual ones
+# Auto-sync dotfiles: pull, apply everything, alert only on conflicts
 
 DOTFILES_DIR="$HOME/.dotfiles"
 SYNC_LOG="$DOTFILES_DIR/.sync-log"
@@ -11,6 +11,18 @@ log() {
   echo "$(date '+%Y-%m-%d %H:%M:%S') | $1" >> "$SYNC_LOG"
 }
 
+alert() {
+  osascript -e "display dialog \"$1\" with title \"Dotfiles Sync\" buttons {\"OK\"} default button \"OK\"" &>/dev/null
+}
+
+# Stash any local changes before syncing
+STASHED=false
+if ! git diff --quiet || ! git diff --cached --quiet; then
+  git stash --quiet
+  STASHED=true
+  log "stashed | local changes stashed before pull"
+fi
+
 # Fetch latest from remote
 git fetch origin main --quiet
 
@@ -18,78 +30,68 @@ git fetch origin main --quiet
 LOCAL=$(git rev-parse HEAD)
 REMOTE=$(git rev-parse origin/main)
 
-if [ "$LOCAL" = "$REMOTE" ]; then
+if [ "$LOCAL" = "$REMOTE" ] && [ "$STASHED" = false ]; then
   log "no changes"
   exit 0
 fi
 
+# Pull with rebase to keep history clean
 if [ "$LOCAL" != "$REMOTE" ]; then
-  # Get list of changed files before pulling
   CHANGED_FILES=$(git diff --name-only HEAD origin/main)
   FILE_COUNT=$(echo "$CHANGED_FILES" | wc -l | tr -d ' ')
 
-  # Pull the changes
-  git pull --quiet
+  if ! git pull --rebase --quiet 2>/dev/null; then
+    log "CONFLICT | rebase failed, aborting"
+    git rebase --abort 2>/dev/null
+    alert "Dotfiles sync hit a merge conflict. Run 'cd ~/.dotfiles && git pull' to resolve."
+    # Restore stashed changes even on failure
+    if [ "$STASHED" = true ]; then
+      git stash pop --quiet 2>/dev/null
+    fi
+    exit 1
+  fi
 
   log "pulled | $FILE_COUNT file(s): $(echo "$CHANGED_FILES" | tr '\n' ' ')"
+fi
 
-  # ===========================================
-  # Auto-apply safe stuff (symlinks)
-  # ===========================================
-
-  # Zsh
-  ln -sf "$DOTFILES_DIR/zshrc" ~/.zshrc
-
-  # Spaceship
-  ln -sf "$DOTFILES_DIR/spaceship/spaceshiprc.zsh" ~/.spaceshiprc.zsh
-
-  # Gitignore
-  ln -sf "$DOTFILES_DIR/gitignore_global" ~/.gitignore_global
-  git config --global core.excludesfile ~/.gitignore_global
-
-  # Ghostty
-  mkdir -p ~/.config/ghostty
-  ln -sf "$DOTFILES_DIR/ghostty/config" ~/.config/ghostty/config
-
-  # Cursor
-  CURSOR_USER_DIR="$HOME/Library/Application Support/Cursor/User"
-  mkdir -p "$CURSOR_USER_DIR"
-  ln -sf "$DOTFILES_DIR/cursor/settings.json" "$CURSOR_USER_DIR/settings.json"
-  ln -sf "$DOTFILES_DIR/cursor/keybindings.json" "$CURSOR_USER_DIR/keybindings.json"
-
-  log "applied | symlinks refreshed"
-
-  # ===========================================
-  # Check if manual action needed
-  # ===========================================
-
-  # Check if Brewfile changed
-  if echo "$CHANGED_FILES" | grep -q "Brewfile"; then
-    log "notify | Brewfile changed, prompted for brew bundle"
-    osascript << 'EOF'
-set theCommand to "brew bundle --file=~/.dotfiles/Brewfile"
-set dialogResult to display dialog "Run this command:
-
-" & theCommand with title "Dotfiles Updated" buttons {"Copy", "Dismiss"} default button "Copy"
-
-if button returned of dialogResult is "Copy" then
-    set the clipboard to theCommand
-end if
-EOF
+# Pop stashed changes
+if [ "$STASHED" = true ]; then
+  if ! git stash pop --quiet 2>/dev/null; then
+    log "CONFLICT | stash pop failed, changes remain in stash"
+    alert "Dotfiles sync: your local changes conflict with pulled changes. Run 'cd ~/.dotfiles && git stash pop' to resolve."
+    exit 1
   fi
+  log "unstashed | local changes restored"
+fi
 
-  # Check if macOS defaults changed
-  if echo "$CHANGED_FILES" | grep -q "macos/defaults.sh"; then
-    log "notify | macos/defaults.sh changed, prompted for manual run"
-    osascript << 'EOF'
-set theCommand to "~/.dotfiles/macos/defaults.sh"
-set dialogResult to display dialog "Run this command:
+# ===========================================
+# Auto-apply everything
+# ===========================================
 
-" & theCommand with title "macOS Settings Updated" buttons {"Copy", "Dismiss"} default button "Copy"
+# Symlinks
+ln -sf "$DOTFILES_DIR/zshrc" ~/.zshrc
+ln -sf "$DOTFILES_DIR/spaceship/spaceshiprc.zsh" ~/.spaceshiprc.zsh
+ln -sf "$DOTFILES_DIR/gitignore_global" ~/.gitignore_global
+git config --global core.excludesfile ~/.gitignore_global
+mkdir -p ~/.config/ghostty
+ln -sf "$DOTFILES_DIR/ghostty/config" ~/.config/ghostty/config
+CURSOR_USER_DIR="$HOME/Library/Application Support/Cursor/User"
+mkdir -p "$CURSOR_USER_DIR"
+ln -sf "$DOTFILES_DIR/cursor/settings.json" "$CURSOR_USER_DIR/settings.json"
+ln -sf "$DOTFILES_DIR/cursor/keybindings.json" "$CURSOR_USER_DIR/keybindings.json"
 
-if button returned of dialogResult is "Copy" then
-    set the clipboard to theCommand
-end if
-EOF
-  fi
+log "applied | symlinks refreshed"
+
+# Brewfile — install new stuff only, no upgrades, no cask cleanup
+if echo "$CHANGED_FILES" | grep -q "Brewfile"; then
+  log "applying | brew bundle (no-upgrade)"
+  brew bundle --file="$DOTFILES_DIR/Brewfile" --no-upgrade --quiet 2>/dev/null
+  log "applied | brew bundle done"
+fi
+
+# macOS defaults
+if echo "$CHANGED_FILES" | grep -q "macos/defaults.sh"; then
+  log "applying | macos/defaults.sh"
+  bash "$DOTFILES_DIR/macos/defaults.sh"
+  log "applied | macos/defaults.sh done"
 fi
