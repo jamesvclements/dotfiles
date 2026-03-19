@@ -102,6 +102,13 @@ if command -v npm &> /dev/null; then
 fi
 
 # ===========================================
+# Raycast Script Commands
+# ===========================================
+
+mkdir -p "$HOME/Library/Application Support/Raycast/Script Commands"
+ln -sf "$DOTFILES_DIR/raycast/restart-universal-control.sh" "$HOME/Library/Application Support/Raycast/Script Commands/restart-universal-control.sh"
+
+# ===========================================
 # AI Tools (Claude Code + Cursor)
 # ===========================================
 

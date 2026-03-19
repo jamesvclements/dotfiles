@@ -89,6 +89,8 @@ ln -sf "$DOTFILES_DIR/claude/settings.json" "$HOME/.claude/settings.json"
 ln -sf "$DOTFILES_DIR/mcp.json" "$HOME/.mcp.json"
 mkdir -p "$HOME/.cursor"
 ln -sf "$DOTFILES_DIR/mcp.json" "$HOME/.cursor/mcp.json"
+mkdir -p "$HOME/Library/Application Support/Raycast/Script Commands"
+ln -sf "$DOTFILES_DIR/raycast/restart-universal-control.sh" "$HOME/Library/Application Support/Raycast/Script Commands/restart-universal-control.sh"
 
 log "applied | symlinks refreshed"
 
