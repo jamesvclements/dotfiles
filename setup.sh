@@ -218,6 +218,34 @@ launchctl unload "$PLIST_DST" 2>/dev/null
 cp "$PLIST_SRC" "$PLIST_DST"
 launchctl load "$PLIST_DST"
 
+# ===========================================
+# HEIC to JPG auto-converter (Folder Action)
+# ===========================================
+
+HEIC_SCRIPT_DIR="$HOME/Library/Scripts/Folder Action Scripts"
+mkdir -p "$HEIC_SCRIPT_DIR"
+osacompile -o "$HEIC_SCRIPT_DIR/HEIC to JPG.scpt" "$DOTFILES_DIR/scripts/heic-to-jpg.applescript"
+
+# Attach to Downloads via AppleScript
+CURRENT_USER=$(whoami)
+osascript <<APPLESCRIPT
+tell application "System Events"
+  set folder actions enabled to true
+  try
+    set fa to folder action "Downloads"
+  on error
+    set downloadsPath to "Macintosh HD:Users:${CURRENT_USER}:Downloads:"
+    set fa to make new folder action with properties {path:downloadsPath, enabled:true}
+  end try
+  set fa's enabled to true
+  try
+    delete every script of fa
+  end try
+  set scriptPath to "Macintosh HD:Users:${CURRENT_USER}:Library:Scripts:Folder Action Scripts:HEIC to JPG.scpt"
+  make new script at end of scripts of fa with properties {name:"HEIC to JPG", path:scriptPath, enabled:true}
+end tell
+APPLESCRIPT
+
 echo ""
 echo "============================================="
 echo " Setup complete!"
