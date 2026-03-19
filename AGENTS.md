@@ -17,6 +17,8 @@ This is a dotfiles repo for syncing macOS setup across multiple Macs.
 ├── fnm/default-packages     # Global npm packages auto-installed with new Node versions
 ├── mcp.json                 # Shared MCP servers (Claude + Cursor)
 ├── skills/                  # AI skills (gitignored, installed via setup)
+├── private/                 # Git submodule for private/sensitive configs
+│   └── skills/              # Personal skills (tweet-caption, etc.)
 ├── macos/defaults.sh        # macOS system preferences (requires manual run)
 ├── scripts/
 │   ├── sync-check.sh        # Hourly sync checker (runs via launchd)
@@ -53,6 +55,36 @@ The `skills/` directory is gitignored (only `.gitkeep` is tracked). During setup
 - **skill-creator** - Guide for creating new skills
 
 `npx skills add` installs to `~/.agents/skills/` and creates symlinks in `skills/`. Claude Code and Cursor both symlink to `skills/`, so both see the installed skills.
+
+## Private Submodule
+
+The `private/` directory is a git submodule pointing to a private repo (`dotfiles-private`). This holds sensitive or personal configs that shouldn't be in the public dotfiles repo.
+
+**Structure:**
+```
+private/                           # Git submodule (private repo)
+└── skills/                        # Personal skills
+    └── tweet-caption/             # Tweet caption generator (trained on personal tweets)
+```
+
+**How it works:**
+- Public dotfiles repo tracks the submodule reference (commit SHA) and symlinks
+- Private repo holds the actual sensitive content
+- Symlinks in `skills/` point to `private/skills/` (e.g., `skills/tweet-caption` → `../private/skills/tweet-caption`)
+- Both public and private content work seamlessly via symlinks
+
+**On new machines:**
+```bash
+git clone https://github.com/jamesvclements/dotfiles.git ~/.dotfiles
+cd ~/.dotfiles
+git submodule update --init --recursive  # Fetches private repo
+./setup.sh
+```
+
+**Adding new private content:**
+1. Add files to `private/` directory
+2. Commit and push to private repo: `cd private && git add . && git commit -m "..." && git push`
+3. Update main repo to track new commit: `cd ~/.dotfiles && git add private && git commit -m "..." && git push`
 
 ## Testing
 
