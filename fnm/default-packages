@@ -3,4 +3,5 @@
 @playwright/mcp
 agent-browser
 lighthouse
+obsidian-headless
 vercel

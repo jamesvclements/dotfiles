@@ -84,6 +84,11 @@ ln -sf "$DOTFILES_DIR/cursor/keybindings.json" "$CURSOR_USER_DIR/keybindings.jso
 FNM_DIR="${FNM_DIR:-$HOME/Library/Application Support/fnm}"
 mkdir -p "$FNM_DIR"
 ln -sf "$DOTFILES_DIR/fnm/default-packages" "$FNM_DIR/default-packages"
+mkdir -p "$HOME/.claude"
+ln -sf "$DOTFILES_DIR/claude/settings.json" "$HOME/.claude/settings.json"
+ln -sf "$DOTFILES_DIR/mcp.json" "$HOME/.mcp.json"
+mkdir -p "$HOME/.cursor"
+ln -sf "$DOTFILES_DIR/mcp.json" "$HOME/.cursor/mcp.json"
 
 log "applied | symlinks refreshed"
 

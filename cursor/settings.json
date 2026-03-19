@@ -100,5 +100,6 @@
   "cursor.composer.shouldChimeAfterChatFinishes": true,
   "git.detectSubmodules": true,
   "git.detectSubmodulesLimit": 2,
-  "window.commandCenter": true
+  "window.commandCenter": true,
+  "git.openRepositoryInParentFolders": "always"
 }

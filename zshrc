@@ -1,6 +1,9 @@
 # Homebrew
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
+# Obsidian CLI (bundled with Obsidian.app)
+export PATH="$PATH:/Applications/Obsidian.app/Contents/MacOS"
+
 
 # fnm
 export PATH="$HOME/Library/Application Support/fnm:$PATH"
@@ -35,3 +38,6 @@ source /opt/homebrew/opt/spaceship/spaceship.zsh
 # Machine-specific config (secrets, local overrides)
 [ -f ~/.zshrc.local ] && source ~/.zshrc.local
 export PATH="$HOME/.local/bin:$PATH"
+
+# Added by Hades
+export PATH="$PATH:$HOME/.hades/bin"

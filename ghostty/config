@@ -1,1 +1,23 @@
 window-inherit-working-directory = true
+
+# Theme
+theme = light:Catppuccin Macchiato,dark:Catppuccin Macchiato
+
+# Font
+# font-family = Fira Code
+# font-size = 13
+
+# Window
+window-padding-x = 8
+window-padding-y = 4
+window-padding-balance = true
+
+# Keybinds
+keybind = shift+enter=text:\x1b\r
+keybind = cmd+shift+up=new_split:up
+keybind = cmd+shift+down=new_split:down
+keybind = cmd+shift+left=new_split:left
+keybind = cmd+shift+right=new_split:right
+
+# Minimal chrome
+macos-titlebar-style = tabs
