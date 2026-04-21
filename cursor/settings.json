@@ -101,5 +101,6 @@
   "git.detectSubmodules": true,
   "git.detectSubmodulesLimit": 2,
   "window.commandCenter": true,
-  "git.openRepositoryInParentFolders": "always"
+  "git.openRepositoryInParentFolders": "always",
+  "security.promptForLocalFileProtocolHandling": false
 }
