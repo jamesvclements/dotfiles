@@ -141,6 +141,12 @@ if ! command -v duti &> /dev/null; then
   brew install duti
 fi
 
+# Set Chrome as default browser
+if osascript -e 'id of app "Google Chrome"' &>/dev/null; then
+  duti -s com.google.Chrome http
+  duti -s com.google.Chrome https
+fi
+
 # Get Cursor bundle ID dynamically
 CURSOR_BUNDLE_ID=$(osascript -e 'id of app "Cursor"' 2>/dev/null)
 
