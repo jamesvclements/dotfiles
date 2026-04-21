@@ -79,6 +79,19 @@ FNM_DIR="${FNM_DIR:-$HOME/Library/Application Support/fnm}"
 mkdir -p "$FNM_DIR"
 ln -sf "$DOTFILES_DIR/fnm/default-packages" "$FNM_DIR/default-packages"
 
+# Install Node via fnm if not already installed
+NODE_DEFAULT_VERSION="24"
+if command -v fnm &> /dev/null; then
+  export PATH="$HOME/Library/Application Support/fnm:$PATH"
+  eval "$(fnm env)" 2>/dev/null || true
+  if ! fnm list 2>/dev/null | grep -q "v${NODE_DEFAULT_VERSION}"; then
+    echo "Installing Node ${NODE_DEFAULT_VERSION} via fnm..."
+    fnm install "$NODE_DEFAULT_VERSION"
+    fnm default "$NODE_DEFAULT_VERSION"
+    fnm use "$NODE_DEFAULT_VERSION"
+  fi
+fi
+
 # Install global packages on current Node if missing
 if command -v npm &> /dev/null; then
   INSTALLED=$(npm ls -g --depth=0 --parseable 2>/dev/null | xargs -I{} basename {})
