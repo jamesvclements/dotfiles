@@ -1,7 +1,5 @@
 @anthropic-ai/claude-code
-@vercel/before-and-after
 @playwright/mcp
 agent-browser
-lighthouse
 obsidian-headless
 vercel
