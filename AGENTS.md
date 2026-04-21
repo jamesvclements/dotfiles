@@ -19,31 +19,22 @@ This is a dotfiles repo for syncing macOS setup across multiple Macs.
 ├── skills/                  # AI skills (gitignored, installed via setup)
 ├── private/                 # Git submodule for private/sensitive configs
 │   └── skills/              # Personal skills (tweet-caption, etc.)
-├── macos/defaults.sh        # macOS system preferences (requires manual run)
-├── scripts/
-│   ├── sync-check.sh        # Hourly sync checker (runs via launchd)
-│   └── com.dotfiles.sync-check.plist # launchd job config
+├── macos/
+│   ├── defaults.sh          # macOS system preferences (trackpad, keyboard, Finder, etc.)
+│   └── dock.sh              # Dock apps + appearance (uses dockutil)
 └── setup.sh                 # Main setup script
 ```
 
 ## How it works
 
-1. `setup.sh` is the entry point - installs Homebrew, links configs, sets up sync
-2. Config files are symlinked, so edits in ~/.dotfiles propagate everywhere
-3. `sync-check.sh` runs hourly via launchd, pulls changes, auto-applies safe stuff (symlinks)
-4. Changes to Brewfile or macos/defaults.sh trigger a dialog prompting manual action
-
-## Key behaviors
-
-- **Safe auto-apply**: symlinks for zshrc, ghostty, cursor, spaceship, gitignore, fnm default-packages
-- **Manual action needed**: Brewfile changes (new apps), macos/defaults.sh changes
-- **Notifications**: Uses osascript dialogs (not notifications) with Copy/Dismiss buttons
+1. `setup.sh` is the entry point — installs Homebrew, links configs, runs macOS defaults
+2. Config files are symlinked, so edits in `~/.dotfiles` propagate everywhere
+3. To pull updates on a machine: `cd ~/.dotfiles && git pull` (re-run `./setup.sh` if Brewfile or macos/ changed)
 
 ## Adding new configs
 
 1. Add the config file to this repo
-2. Add symlink command to both `setup.sh` and `scripts/sync-check.sh`
-3. If it requires manual action, add a dialog check in `sync-check.sh`
+2. Add a symlink command to `setup.sh`
 
 ## AI Skills
 
@@ -86,8 +77,3 @@ git submodule update --init --recursive  # Fetches private repo
 2. Commit and push to private repo: `cd private && git add . && git commit -m "..." && git push`
 3. Update main repo to track new commit: `cd ~/.dotfiles && git add private && git commit -m "..." && git push`
 
-## Testing
-
-Run sync manually: `~/.dotfiles/scripts/sync-check.sh`
-Check launchd status: `launchctl list | grep dotfiles`
-View sync log: `cat ~/.dotfiles/.sync-log` (gitignored, local audit trail)

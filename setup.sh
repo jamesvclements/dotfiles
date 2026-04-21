@@ -212,20 +212,6 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 fi
 
 # ===========================================
-# Sync checker (launchd)
-# ===========================================
-
-PLIST_SRC="$DOTFILES_DIR/scripts/com.dotfiles.sync-check.plist"
-PLIST_DST="$HOME/Library/LaunchAgents/com.dotfiles.sync-check.plist"
-
-# Unload if already loaded
-launchctl unload "$PLIST_DST" 2>/dev/null
-
-# Copy and load
-cp "$PLIST_SRC" "$PLIST_DST"
-launchctl load "$PLIST_DST"
-
-# ===========================================
 # HEIC to JPG auto-converter (Folder Action)
 # ===========================================
 
@@ -258,7 +244,7 @@ echo "============================================="
 echo " Setup complete!"
 echo "============================================="
 echo ""
-echo "Dotfiles linked. Sync checker installed."
+echo "Dotfiles linked."
 echo ""
 echo "---------------------------------------------"
 echo " Manual steps required:"
