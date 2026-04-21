@@ -106,6 +106,15 @@ defaults write NSGlobalDomain KeyRepeat -int 2
 defaults write NSGlobalDomain InitialKeyRepeat -int 15
 
 # ===========================================
+# Spotlight
+# ===========================================
+
+# Disable Cmd+Space and Cmd+Opt+Space Spotlight shortcuts so Raycast can claim them
+# 64 = Show Spotlight search, 65 = Show Finder search window
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 "{enabled = 0; value = { parameters = (32, 49, 1048576); type = 'standard'; }; }"
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 65 "{enabled = 0; value = { parameters = (32, 49, 1572864); type = 'standard'; }; }"
+
+# ===========================================
 # Finder
 # ===========================================
 
@@ -183,5 +192,8 @@ fi
 # Restart affected applications
 killall Finder 2>/dev/null
 killall SystemUIServer 2>/dev/null
+
+# Reload symbolic hotkeys so Spotlight changes take effect without logout
+/System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u 2>/dev/null
 
 echo "Done! Some changes may require a logout/restart to take effect."
