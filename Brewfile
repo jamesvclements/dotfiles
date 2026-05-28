@@ -12,6 +12,7 @@ brew "ripgrep"
 brew "ffmpeg"
 brew "imagemagick"
 brew "yt-dlp"
+brew "tesseract"
 
 # GUI Apps
 cask "1password"
@@ -29,3 +30,4 @@ cask "pixelsnap"
 cask "superwhisper"
 cask "ngrok"
 cask "zoom"
+cask "figma-agent"
