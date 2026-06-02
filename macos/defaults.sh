@@ -131,6 +131,14 @@ defaults write com.apple.finder ShowPathbar -bool true
 # Save screenshots to Downloads
 defaults write com.apple.screencapture location -string "$HOME/Downloads"
 
+# Disable built-in screenshot shortcuts so CleanShot can own them.
+# IDs: 28=⇧⌘3, 29=⌃⇧⌘3, 30=⇧⌘4, 31=⌃⇧⌘4, 184=⇧⌘5
+# Requires logout/reboot — WindowServer caches the hotkey map at login.
+for id in 28 29 30 31 184; do
+  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add "$id" \
+    "<dict><key>enabled</key><false/></dict>"
+done
+
 # ===========================================
 # Default Applications
 # ===========================================

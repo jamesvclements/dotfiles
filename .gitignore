@@ -5,3 +5,4 @@
 skills/*
 !skills/.gitkeep
 !skills/tweet-caption
+!skills/this-week

@@ -70,6 +70,13 @@ mkdir -p "$CURSOR_USER_DIR"
 ln -sf "$DOTFILES_DIR/cursor/settings.json" "$CURSOR_USER_DIR/settings.json"
 ln -sf "$DOTFILES_DIR/cursor/keybindings.json" "$CURSOR_USER_DIR/keybindings.json"
 
+# Cursor CLI — avoids needing to run "Shell Command: Install 'cursor' command
+# in PATH" from Cursor's command palette on every fresh machine.
+if [ -x "/Applications/Cursor.app/Contents/Resources/app/bin/cursor" ]; then
+  mkdir -p "$HOME/bin"
+  ln -sf "/Applications/Cursor.app/Contents/Resources/app/bin/cursor" "$HOME/bin/cursor"
+fi
+
 # ===========================================
 # Node (fnm)
 # ===========================================
@@ -110,6 +117,21 @@ if command -v npm &> /dev/null; then
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
       npm install -g "${MISSING[@]}"
+    fi
+  fi
+fi
+
+# Install global pnpm packages.
+# @vercel/slack-cli is private; requires npm login to the @vercel org first.
+# Token is intentionally NOT synced via dotfiles — log in manually on each machine:
+#   pnpm login --scope=@vercel --registry=https://registry.npmjs.org/
+if command -v pnpm &> /dev/null; then
+  if ! pnpm list -g --depth=0 2>/dev/null | grep -q "@vercel/slack-cli"; then
+    if pnpm whoami &> /dev/null; then
+      echo "Installing @vercel/slack-cli via pnpm..."
+      pnpm install -g @vercel/slack-cli || echo "  (install failed — your npm token may not have @vercel org access)"
+    else
+      echo "Skipping @vercel/slack-cli — not logged in to npm. Run: pnpm login --scope=@vercel --registry=https://registry.npmjs.org/"
     fi
   fi
 fi
@@ -161,6 +183,11 @@ rm -rf "$HOME/.claude/skills" 2>/dev/null
 rm -rf "$HOME/.cursor/skills" 2>/dev/null
 ln -s "$DOTFILES_DIR/skills" "$HOME/.claude/skills"
 ln -s "$DOTFILES_DIR/skills" "$HOME/.cursor/skills"
+
+# --- Shared: Agent docs (~/.agents) ---
+# Reference docs for agents (e.g. the native-macOS Tahoe design guide), sourced from the private submodule.
+mkdir -p "$HOME/.agents"
+ln -sfn "$DOTFILES_DIR/private/agents/glaze" "$HOME/.agents/glaze"
 
 # Install AI skills via npx
 read -p "Install AI skills (browser, react-best-practices, web-design-guidelines, skill-creator)? (y/n) " -n 1 -r

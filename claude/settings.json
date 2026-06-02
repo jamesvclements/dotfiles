@@ -1,4 +1,8 @@
 {
+  "apiKeyHelper": "security find-generic-password -a \"$USER\" -s \"ANTHROPIC_AUTH_TOKEN\" -w",
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://ai-gateway.vercel.sh"
+  },
   "attribution": {
     "commit": "",
     "pr": ""
@@ -70,8 +74,10 @@
   },
   "enabledPlugins": {
     "figma@claude-plugins-official": true,
-    "vercel@claude-plugins-official": true
+    "vercel@claude-plugins-official": true,
+    "notion@claude-plugins-official": true
   },
+  "effortLevel": "xhigh",
   "skipDangerousModePermissionPrompt": true,
-  "model": "opus[1m]"
+  "fastMode": true
 }
