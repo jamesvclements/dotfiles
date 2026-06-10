@@ -68,12 +68,28 @@
       "Bash(docker *)"
     ]
   },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Bash(git push:*)",
+            "command": "~/.claude/hooks/guard-git-push.sh",
+            "statusMessage": "Checking git push target..."
+          }
+        ]
+      }
+    ]
+  },
   "enabledPlugins": {
     "figma@claude-plugins-official": true,
     "vercel@claude-plugins-official": true,
-    "notion@claude-plugins-official": true
+    "notion@claude-plugins-official": true,
+    "swift-lsp@claude-plugins-official": true
   },
-  "effortLevel": "xhigh",
-  "skipDangerousModePermissionPrompt": true,
-  "fastMode": true
+  "effortLevel": "high",
+  "fastMode": true,
+  "skipDangerousModePermissionPrompt": true
 }
