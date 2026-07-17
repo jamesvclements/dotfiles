@@ -5,6 +5,7 @@
 skills/*
 !skills/.gitkeep
 !skills/tweet-caption
-!skills/this-week
+!skills/jmsv-this-week
 !skills/glaze-macos-design
 !skills/lunchmoney
+!skills/jmsv-pr
