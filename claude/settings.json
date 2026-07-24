@@ -1,4 +1,8 @@
 {
+  "apiKeyHelper": "security find-generic-password -a \"$USER\" -s 'ANTHROPIC_AUTH_TOKEN' -w",
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://ai-gateway.vercel.sh"
+  },
   "attribution": {
     "commit": "",
     "pr": ""
@@ -61,13 +65,12 @@
       "Bash(sudo rm -rf *)"
     ],
     "ask": [
-      "Bash(git push *)",
       "Bash(git merge *)",
       "Bash(git rebase *)",
-      "Bash(rm *)",
       "Bash(docker *)"
     ]
   },
+  "model": "sonnet",
   "hooks": {
     "PreToolUse": [
       {
@@ -75,8 +78,8 @@
         "hooks": [
           {
             "type": "command",
-            "if": "Bash(git push:*)",
             "command": "~/.claude/hooks/guard-git-push.sh",
+            "if": "Bash(git push:*)",
             "statusMessage": "Checking git push target..."
           }
         ]
@@ -87,7 +90,16 @@
     "figma@claude-plugins-official": true,
     "vercel@claude-plugins-official": true,
     "notion@claude-plugins-official": true,
-    "swift-lsp@claude-plugins-official": true
+    "swift-lsp@claude-plugins-official": true,
+    "slack@claude-plugins-official": true
+  },
+  "extraKnownMarketplaces": {
+    "james-local": {
+      "source": {
+        "source": "directory",
+        "path": "/Users/james/.claude/local-marketplace"
+      }
+    }
   },
   "effortLevel": "high",
   "fastMode": true,
