@@ -197,6 +197,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
   npx -y skills add https://github.com/vercel-labs/agent-browser --skill agent-browser --agent claude-code --global --yes
   npx -y skills add https://github.com/vercel-labs/agent-skills --skill vercel-react-best-practices --skill web-design-guidelines --agent claude-code --global --yes
   npx -y skills add https://github.com/anthropics/skills --skill skill-creator --agent claude-code --global --yes
+  npx -y skills add https://github.com/mattpocock/skills --skill grill-me --skill grilling --agent claude-code --global --yes
 
   # Install agent-browser CLI and Chromium for browser skill
   if ! command -v agent-browser &> /dev/null; then
