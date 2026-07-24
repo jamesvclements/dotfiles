@@ -83,7 +83,7 @@
   },
   "cursor.composer.renderPillsInsteadOfBlocks": true,
   "githubPullRequests.pullBranch": "never",
-  "cursor.cpp.disabledLanguages": ["plaintext"],
+  "cursor.cpp.disabledLanguages": [],
   "eslint.codeActionsOnSave.mode": "problems",
   "workbench.view.alwaysShowHeaderActions": true,
   "typescript.tsserver.maxTsServerMemory": 32768,
