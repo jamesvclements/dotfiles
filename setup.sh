@@ -149,16 +149,31 @@ ln -sf "$DOTFILES_DIR/raycast/restart-universal-control.sh" "$HOME/Library/Appli
 
 # --- Claude Code ---
 mkdir -p "$HOME/.claude"
-CLAUDE_HAD_CUSTOM_SETTINGS=false
-
-# Backup existing settings if present and not already a symlink
-if [ -f "$HOME/.claude/settings.json" ] && [ ! -L "$HOME/.claude/settings.json" ]; then
-  mv "$HOME/.claude/settings.json" "$HOME/.claude/settings.backup.json"
-  echo "Backed up existing ~/.claude/settings.json to settings.backup.json"
-  CLAUDE_HAD_CUSTOM_SETTINGS=true
+# settings.json is deliberately NOT symlinked and NOT tracked.
+# Claude Code rewrites it on /login, /config, model and plugin changes, so sharing one
+# file across machines made devices with different auth (this laptop: standard account
+# login; the Mac mini: Vercel AI Gateway) clobber each other on every pull.
+# Seed it from the template only when absent, then leave it alone forever.
+# Migration: if an older setup left a symlink into the repo, break it and keep the content.
+if [ -L "$HOME/.claude/settings.json" ]; then
+  cp "$(readlink "$HOME/.claude/settings.json")" "$HOME/.claude/settings.json.unlinked" 2>/dev/null
+  rm "$HOME/.claude/settings.json"
+  mv "$HOME/.claude/settings.json.unlinked" "$HOME/.claude/settings.json" 2>/dev/null
+  echo "Un-synced ~/.claude/settings.json (was a symlink into dotfiles); it is now local-only"
+fi
+if [ ! -f "$HOME/.claude/settings.json" ]; then
+  cp "$DOTFILES_DIR/claude/settings.template.json" "$HOME/.claude/settings.json"
+  echo "Seeded ~/.claude/settings.json from template (local-only; set auth with /login)"
+fi
+if [ -L "$HOME/.claude/settings.local.json" ]; then
+  cp "$(readlink "$HOME/.claude/settings.local.json")" "$HOME/.claude/settings.local.json.unlinked" 2>/dev/null
+  rm "$HOME/.claude/settings.local.json"
+  mv "$HOME/.claude/settings.local.json.unlinked" "$HOME/.claude/settings.local.json" 2>/dev/null
 fi
 
-ln -sf "$DOTFILES_DIR/claude/settings.json" "$HOME/.claude/settings.json"
+# Hooks ARE shared (plain scripts, no auth/device state) — settings.json references
+# ~/.claude/hooks/, so without this the guard-git-push hook silently never fires.
+ln -sfn "$DOTFILES_DIR/claude/hooks" "$HOME/.claude/hooks"
 
 # --- Cursor ---
 mkdir -p "$HOME/.cursor"
@@ -295,13 +310,6 @@ echo "APPS TO DOWNLOAD MANUALLY:"
 echo "  - Cursor: https://cursor.com/download"
 echo "  - Tailscale: https://tailscale.com/download"
 echo ""
-if [ "$CLAUDE_HAD_CUSTOM_SETTINGS" = true ]; then
-  echo "CLAUDE CODE:"
-  echo "  Your existing permissions were backed up to:"
-  echo "  ~/.claude/settings.backup.json"
-  echo "  Move any custom permissions to ~/.claude/settings.local.json"
-  echo ""
-fi
 echo "LOGIN ITEMS TO ADD:"
 echo "  Open System Settings → General → Login Items → add these:"
 echo "  - Dropbox"

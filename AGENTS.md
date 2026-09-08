@@ -13,7 +13,9 @@ This is a dotfiles repo for syncing macOS setup across multiple Macs.
 ├── cursor/
 │   ├── settings.json        # Cursor editor settings
 │   └── keybindings.json     # Cursor keybindings
-├── claude/settings.json     # Claude Code settings
+├── claude/
+│   ├── settings.template.json # Fresh-machine seed for ~/.claude/settings.json (NOT synced after)
+│   └── hooks/               # Claude Code hook scripts (symlinked to ~/.claude/hooks)
 ├── fnm/default-packages     # Global npm packages auto-installed with new Node versions
 ├── mcp.json                 # Shared MCP servers (Claude + Cursor)
 ├── skills/                  # AI skills (gitignored, installed via setup)
@@ -46,6 +48,25 @@ The `skills/` directory is gitignored (only `.gitkeep` is tracked). During setup
 - **skill-creator** - Guide for creating new skills
 
 `npx skills add` installs to `~/.agents/skills/` and creates symlinks in `skills/`. Claude Code and Cursor both symlink to `skills/`, so both see the installed skills.
+
+## Claude Code settings are not synced
+
+`~/.claude/settings.json` is intentionally **local-only** — not symlinked, not tracked, gitignored.
+
+Claude Code rewrites that file itself on `/login`, `/config`, and model or plugin changes. When it
+was symlinked into this repo, every such write became a repo diff, and the two machines need
+*different* auth — this laptop uses a standard account login, the Mac mini uses the Vercel AI
+Gateway (`apiKeyHelper` + `ANTHROPIC_BASE_URL`) — so each device kept clobbering the other's auth
+on pull. Splitting out just the auth keys was tried and did not hold; the file is now unsynced.
+
+- `claude/settings.template.json` — machine-agnostic seed (permissions, attribution, hooks).
+  `setup.sh` copies it to `~/.claude/settings.json` **only if that file does not exist**, then never
+  touches it again. Per-device keys (auth, model, effort, plugins) never belong in the template.
+- `claude/hooks/` — still shared, since hook scripts carry no auth or device state. `setup.sh`
+  symlinks it to `~/.claude/hooks`, which is what `settings.json` hook paths point at.
+- New machine: run `./setup.sh`, then `claude` → `/login` to pick that device's auth.
+
+Do not re-add `claude/settings.json` to git.
 
 ## Private Submodule
 

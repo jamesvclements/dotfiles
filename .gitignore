@@ -11,3 +11,11 @@ skills/*
 !skills/jmsv-pr
 !skills/jmsv-prs
 !skills/jmsv-ship
+
+# Claude Code settings are deliberately NOT synced.
+# Claude Code rewrites ~/.claude/settings.json on /login, /config, model and plugin
+# changes. Syncing it made devices needing different auth (standard account login vs
+# Vercel AI Gateway) overwrite each other. claude/settings.template.json is the
+# fresh-machine seed; the live file stays local. Do not re-add these.
+claude/settings.json
+claude/settings.local.json
