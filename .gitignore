@@ -11,6 +11,7 @@ skills/*
 !skills/jmsv-pr
 !skills/jmsv-prs
 !skills/jmsv-ship
+!skills/write-as-james
 
 # Claude Code settings are deliberately NOT synced.
 # Claude Code rewrites ~/.claude/settings.json on /login, /config, model and plugin
