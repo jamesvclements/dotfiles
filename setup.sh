@@ -204,6 +204,13 @@ ln -s "$DOTFILES_DIR/skills" "$HOME/.cursor/skills"
 mkdir -p "$HOME/.agents"
 ln -sfn "$DOTFILES_DIR/private/agents/glaze" "$HOME/.agents/glaze"
 
+# Codex discovers global skills through ~/.agents/skills.
+mkdir -p "$HOME/.agents/skills"
+for SKILL_DIR in "$DOTFILES_DIR"/skills/*; do
+  [ -f "$SKILL_DIR/SKILL.md" ] || continue
+  ln -sfn "$SKILL_DIR" "$HOME/.agents/skills/$(basename "$SKILL_DIR")"
+done
+
 # Install AI skills via npx
 read -p "Install AI skills (browser, react-best-practices, web-design-guidelines, skill-creator)? (y/n) " -n 1 -r
 echo
