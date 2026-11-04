@@ -106,6 +106,15 @@ defaults write NSGlobalDomain KeyRepeat -int 2
 defaults write NSGlobalDomain InitialKeyRepeat -int 15
 
 # ===========================================
+# Siri
+# ===========================================
+
+# Disable Siri's keyboard shortcut, including double-press Command.
+# 176 is the Siri hotkey; SAE1.0 identifies the Apple Intelligence shortcut.
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 176 \
+  '<dict><key>enabled</key><false/><key>value</key><dict><key>type</key><string>SAE1.0</string></dict></dict>'
+
+# ===========================================
 # Spotlight
 # ===========================================
 
